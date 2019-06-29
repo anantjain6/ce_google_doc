@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Use this CSS stylesheet to ensure that add-ons styling 
+     matches the default Google Docs styles -->
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons.css"
+     rel="stylesheet"> 
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="msg"></div>
+      <div class="block form-group">
+        <label for="site">Enter Drupal Site URL</label>
+        <input type="url" id="site" placeholder="http://example.com/folder" required/>
+      </div>
+      <div class="block form-group">
+        <label for="key">Enter API Key</label>
+        <input type="text" id="key" placeholder="d6a157b3e335ab83fc07d181ca33026b6b2dda5b971512704472704bce438926" required/>
+      </div>
+      <div class="block form-group">
+        <button class="blue" id="add_site">Add Site</button>
+      </div>
+    </div>
+
+    <!-- Load the jQuery library from the Google CDN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    
+    <script>
+      // Attach click handlers after the Sidebar has loaded in Google Docs
+      $(function() {
+        // Use Static Maps to generate an image of the address entered by the user 
+        $('#add_site').click(function() {
+          var url = $('#site').val();
+          var key = $('#key').val();
+          if(url == "") {
+            google.script.run.showAlert('Error', 'Site URL can not be empty.');
+          } else if(key == "") {
+            google.script.run.showAlert('Error', 'API Key can not be empty.');
+          } else if(url.slice(-1) == '/') {
+            google.script.run.testConnection(url.slice(0,-1), key);
+          } else {
+            google.script.run.testConnection(url, key);
+          }
+        });
+   
+        $('#site').keyup(function(e) {
+          if (e.keyCode === 13) {
+             $('#add_site').click();
+          }
+        });
+   
+        $('#key').keyup(function(e) {
+          if (e.keyCode === 13) {
+             $('#add_site').click();
+          }
+        });
+        
+      });
+    </script>
+  </body>
+</html>
